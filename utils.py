@@ -39,13 +39,52 @@ def normalize_color(color):
 def denormalize_color(color):
     return color * 255
 
-def add_row(start=0, end=0, color=np.array([0, 0, 0])):
-    if end == 0:
-        end = app.weave.shape[1]
-    new_row = [np.array([0, 0, 0]) for i in range(app.weave.shape[1])]    
-    new_row[start:end] = [color for i in range(end-start)]
+def create_subweave():
+    columns = app.weave.columns.tolist()
+    df = pd.DataFrame(columns=columns)
+    return df
 
-    app.weave.loc[len(app.weave)] = new_row
+def merge_subweave(df):
+    app.weave = pd.concat([app.weave, df], ignore_index=True)
+
+# def add_row(starts=np.array([0]), lengths=np.array([0]), colors=[np.array([0, 0, 0])]):
+
+#     new_row = [np.array([0, 0, 0]) for i in range(app.weave.shape[1])]   
+#     ends = starts + lengths
+#     for i in range(len(starts)):
+#         if ends[i] == 0:
+#             ends[i] = app.weave.shape[1]
+#         if ends[i] < starts[i]:
+#             raise ValueError("end can't be smaller than start")
+#         if ends[i] > app.weave.shape[1]:
+#             raise ValueError("end cant be larger than weave")
+        
+#         new_row[starts[i]:ends[i]] = [colors[i] for k in range(ends[i]-starts[i])]
+
+#     app.weave.loc[len(app.weave)] = new_row
+
+def add_row(starts=np.array([0]), ends=np.array([0]), colors=[np.array([0, 0, 0])], df=None):
+    if df.empty:
+        df = app.weave
+    
+    if len(starts) != len(ends):
+        raise ValueError("Starts and ends need to be the same length.")
+    if len(colors) != len(starts):
+        raise ValueError("Colors need to be same lengths as starts and ends.")
+    
+    new_row = [np.array([0, 0, 0]) for i in range(df.shape[1])]   
+    
+    for i in range(len(starts)):
+        if ends[i] == 0:
+            ends[i] = df.shape[1]
+        if ends[i] < starts[i]:
+            raise ValueError("end can't be smaller than start")
+        if ends[i] > df.shape[1]:
+            raise ValueError("end cant be larger than weave")
+        
+        new_row[starts[i]:ends[i]] = [colors[i] for j in range(ends[i]-starts[i])]
+
+    df.loc[len(df)] = new_row
     
 def export_png(filename="output"):
     # Convert the DataFrame to a list of lists
@@ -58,7 +97,8 @@ def export_png(filename="output"):
     image = Image.fromarray(image_array)
     # Save the image to a PNG file
     image.save("output/" + filename + ".png")
-    print("Image saved")
+    print("Image saved with filename: " + filename)
 
-def export_weave(filename="weave_raw"):
-    pass
+def export_weave(df, filename="weave_raw"):
+    df.to_csv(filename + ".csv")
+    print("Weave saved with filename: " + filename)
