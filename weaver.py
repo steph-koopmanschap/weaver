@@ -27,37 +27,3 @@ generate()
 print("WEAVE SNAPSHOT:")
 print(app.weave.head(10))
 export_png()
-
-
-
-# for i in range(generation_count):
-#     try:
-#         x = 1 / (i ** 2)
-#     except Exception:
-#         x = 1
-#     x = int(x * 255)
-    
-    
-#     add_row(color=np.array([x, x, x]))
-    
-    
-
-    
-    
-
-    
-# print("sine")
-# print(sine)
-# print("row stats last:")
-# row_stats()
-# print("row stats last 25:")
-# row_stats(25)
-# print("row stats all:")
-# row_stats(len(app.weave)-1)
-
-
-
-
-
-
-
