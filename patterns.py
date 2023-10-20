@@ -55,9 +55,40 @@ def sine(length=10):
     
     merge_subweave(subweave)
 
+# Work in progress
+def pyramid(height, width, offset, color):
+    subweave = create_subweave()
+    middle = int(width * 0.5)
+    peak_length = int((middle * 2) + offset)
+    
+    for i in range(0, int(subweave.shape[1] / width)):
+        start = 0
+    
+    starts = [0, middle, width+offset]
+    
+    starts = [x for x in range(middle, 0)]
+    ends = [y for y in range(middle, int(middle * 2))]
+    colors = [GREEN for z in starts]
+    #starts = [middle, middle-1]
+    #ends = [middle, middle+1]
+    #add_row(start, end, color subweave)
+    merge_subweave(subweave)
+
+# Supply a list of colors that alternate
+def alternating(iterations, colors):
+    subweave = create_subweave()
+    if len(colors) < 2:
+        raise ValueError("Supply at least 2 or more colors")
+    for iter in iterations:
+        for color in colors:
+            add_row(colors=[color], df=subweave)
+    merge_subweave(subweave)
+            
+
 patterns_list = [
                     true_random,
                     random_row,
                     random_simple,
-                    sine
+                    sine,
+                    alternating
                 ]
